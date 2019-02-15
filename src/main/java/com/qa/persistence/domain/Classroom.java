@@ -29,4 +29,8 @@ public class Classroom {
 	public void setTrainerName(String trainerName) {
 		this.trainerName = trainerName;
 	}
+
+	public int getClassroomID() {
+		return classroomID;
+	}
 }

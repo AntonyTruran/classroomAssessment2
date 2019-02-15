@@ -43,4 +43,8 @@ public class Trainee {
 	public void setAssignedClassroom(int assignedClassroom) {
 		this.assignedClassroom = assignedClassroom;
 	}
+
+	public int getId() {
+		return id;
+	}
 }
