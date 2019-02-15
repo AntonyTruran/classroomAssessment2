@@ -18,7 +18,7 @@ public class Classroom {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int classroomID;
+	private int classroomId;
 	@Column(length = 100)
 	private String trainerName;
 
@@ -30,7 +30,7 @@ public class Classroom {
 		this.trainerName = trainerName;
 	}
 
-	public int getClassroomID() {
-		return classroomID;
+	public int getClassroomId() {
+		return classroomId;
 	}
 }

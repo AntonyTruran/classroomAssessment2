@@ -16,14 +16,14 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.qa.persistence.domain.Trainee;
-import com.qa.persistence.repository.TraineeDBRepository;
+import com.qa.persistence.domain.Classroom;
+import com.qa.persistence.repository.ClassroomDBRepository;
 import com.qa.util.JSONUtil;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ClassroomRepositoryTests {
 	@InjectMocks
-	TraineeDBRepository repo;
+	ClassroomDBRepository repo;
 	@Mock
 	private EntityManager entity;
 	@Mock
@@ -31,77 +31,68 @@ public class ClassroomRepositoryTests {
 
 	private JSONUtil util;
 
-	private static final String MOCK_TABLE_ROW = "[{\"traineeName\":\"David Bloggs\",\"classroomID\":\"2\"}]";
-	private static final String MOCK_ENTRY = "{\"traineeName\":\"David Bloggs\",\"classroomID\":\"2\"}";
+	private static final String MOCK_TABLE_ROW = "[{\"classroomId\":0,\"trainerName\":\"John Gordon\"}]";
+	private static final String MOCK_ENTRY = "{\"classroomId\":0,\"trainerName\":\"John Gordon\"}";
 
 	@Before
-	private void setup() {
+	public void setup() {
 		repo.setEntity(entity);
 		util = new JSONUtil();
 		repo.setUtil(util);
 	}
 
 	@Test
-	public void getAllTrainees() {
+	public void getAllClassrooms() {
 		Mockito.when(entity.createQuery(Mockito.anyString())).thenReturn(query);
-		List<Trainee> mockTrainee = new ArrayList<Trainee>();
-		mockTrainee.add(new Trainee("David Bloggs", 2));
-		Mockito.when(query.getResultList()).thenReturn(mockTrainee);
-		assertEquals(MOCK_TABLE_ROW, repo.getAllTrainees());
+		List<Classroom> mockClassroom = new ArrayList<Classroom>();
+		mockClassroom.add(new Classroom("John Gordon"));
+		Mockito.when(query.getResultList()).thenReturn(mockClassroom);
+		assertEquals(MOCK_TABLE_ROW, repo.getAllClassrooms());
 	}
 
 	@Test
-	public void getATrainee() {
-		Trainee mockTrainee = new Trainee("David Bloggs", 2);
-		Mockito.when(entity.find(Mockito.anyObject(), Mockito.anyLong())).thenReturn(mockTrainee);
-		assertEquals(MOCK_ENTRY, repo.getATrainee("David Bloggs"));
+	public void getAClassroom() {
+		Classroom mockClassroom = new Classroom("John Gordon");
+		Mockito.when(entity.find(Mockito.anyObject(), Mockito.anyLong())).thenReturn(mockClassroom);
+		assertEquals(MOCK_ENTRY, repo.getAClassroom(1));
 	}
 
 	@Test
-	public void countByClassroom() {
-		Mockito.when(entity.createQuery(Mockito.anyString())).thenReturn(query);
-		List<Trainee> cycledTrainees = new ArrayList<Trainee>();
-		cycledTrainees.add(new Trainee("David Bloggs", 2));
-		Mockito.when(query.getResultList()).thenReturn(cycledTrainees);
-		assertEquals(1, repo.countByClassroom("2"));
+	public void addClassroom() {
+		assertEquals("{\"message\":\"The classroom has been successfully added\"}", repo.addClassroom(MOCK_ENTRY));
 	}
 
 	@Test
-	public void addTrainee() {
-		assertEquals("{\"message\":\"The trainee has been successfully added\"}", repo.addTrainee(MOCK_ENTRY));
-	}
-
-	@Test
-	public void removeTraineeValid() {
+	public void removeClassroomValid() {
 		Mockito.when(entity.contains(Mockito.anyObject())).thenReturn(true);
-		assertEquals("{\"message\":\"Trainee successfully removed\"}", repo.removeTrainee(1));
+		assertEquals("{\"message\":\"Classroom successfully removed\"}", repo.removeClassroom(1));
 	}
 
 	@Test
-	public void removeTraineeInvalid() {
-		assertEquals("{\"message\":\"No such trainee\"}", repo.removeTrainee(1));
+	public void removeClassroomInvalid() {
+		assertEquals("{\"message\":\"No such classroom\"}", repo.removeClassroom(1));
 	}
 
 	@Test
-	public void ammendTraineeInvalid() {
-		String trainee = "{\"traineeId\":\"1\",\"traineeName\":\"Dave Bloggs\",\"assignedClassroom\":\"2\"}";
-		assertEquals("{\"message\": \"no such account\"}", repo.ammendTrainee(1, trainee));
+	public void ammendClassroomInvalid() {
+		String classroom = "{\"trainerId\":\"1\",\"classroomName\":\"John Gordon\",\"assignedClassroom\":\"1\"}";
+		assertEquals("{\"message\": \"no such classroom\"}", repo.ammendClassroom(1, classroom));
 	}
 
 	@Test
-	public void ammendTraineeValid1() {
-		String trainee = "{\"id\":\"1\"}";
+	public void ammendClassroomValid1() {
+		String classroom = "{\"classroomId\":\"1\"}";
 		Mockito.when(entity.contains(Mockito.anyObject())).thenReturn(true);
-		Mockito.when(entity.find(Mockito.any(), Mockito.anyLong())).thenReturn(trainee);
-		assertEquals("{\"message\": \"account has been sucessfully updated\"}", repo.ammendTrainee(1, trainee));
+		Mockito.when(entity.find(Mockito.any(), Mockito.anyLong())).thenReturn(classroom);
+		assertEquals("{\"message\": \"classroom has been sucessfully updated\"}", repo.ammendClassroom(1, classroom));
 	}
 
 	@Test
-	public void ammendTraineeValid2() {
-		String trainee = "{\"traineeName\":\"Dave Bloggs\",\"assignedClassroom\":\"1\"}";
+	public void ammendClassroomValid2() {
+		String classroom = "{\"trainerName\":\"Dave Bloggs\",\"assignedClassroom\":\"1\"}";
 		Mockito.when(entity.contains(Mockito.anyObject())).thenReturn(true);
-		Mockito.when(entity.find(Mockito.any(), Mockito.anyLong())).thenReturn(trainee);
-		assertEquals("{\"message\": \"account has been sucessfully updated\"}", repo.ammendTrainee(1, trainee));
+		Mockito.when(entity.find(Mockito.any(), Mockito.anyLong())).thenReturn(classroom);
+		assertEquals("{\"message\": \"classroom has been sucessfully updated\"}", repo.ammendClassroom(1, classroom));
 	}
 
 }
