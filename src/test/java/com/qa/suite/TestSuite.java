@@ -7,7 +7,7 @@ import com.qa.classroomTests.ClassroomRepositoryTests;
 import com.qa.traineeTests.TraineeRepositoryTests;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ClassroomRepositoryTests.class, TraineeRepositoryTests.class})
+@Suite.SuiteClasses({ TraineeRepositoryTests.class,ClassroomRepositoryTests.class})
 public class TestSuite {
 
 }
